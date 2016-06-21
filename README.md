@@ -1,4 +1,4 @@
-# html-boilerplate
+# Express-Boilerplate
 
 This boilerplate contains setup from express web application.
 
