@@ -5,6 +5,8 @@
 
 // Load plugins
 var gulp = require('gulp'),
+  nodemon = require('gulp-nodemon'),
+  browserSync = require('browser-sync').create(),
   sass = require('gulp-ruby-sass'),
   autoprefixer = require('gulp-autoprefixer'),
   cssnano = require('gulp-cssnano'),
@@ -111,11 +113,27 @@ gulp.task('images', function() {
     }));
 });
 
-//gulp.task('browser-sync', function() {
-//    browserSync.init(null,{
-//        proxy:"http://localhost:3000"
-//    });
-//});
+gulp.task('browser-sync', function() {
+  browserSync.init(null, {
+    proxy: "http://localhost:5000"
+  });
+});
+
+gulp.task('server', function() {
+  // configure nodemon
+  nodemon({
+    // the script to run the app
+    script: 'app.js',
+    // this listens to changes in any of these files/routes and restarts the application
+    watch: ["app.js", "routes/", 'public/*', 'public/*/**'],
+    ext: 'js'
+      // Below i'm using es6 arrow functions but you can remove the arrow and have it a normal .on('restart', function() { // then place your stuff in here }
+  }).on('restart', () => {
+    gulp.src('app.js')
+      // I've added notify, which displays a message on restart. Was more for me to test so you can remove this
+      .pipe(notify('Running the start tasks and stuff'));
+  });
+});
 
 // Clean
 gulp.task('clean', function() {
@@ -124,7 +142,7 @@ gulp.task('clean', function() {
 
 // Default task
 gulp.task('default', ['clean'], function() {
-  gulp.start('styles', 'scripts-custom','scripts-vendor', 'images', 'copy', 'copy-script', 'watch');
+  gulp.start('styles', 'scripts-custom', 'scripts-vendor', 'images', 'copy', 'server', 'browser-sync', 'watch');
 });
 
 // Watch
@@ -134,7 +152,7 @@ gulp.task('watch', function() {
   gulp.watch('src/styles/**/*.scss', ['styles']);
 
   // Watch .js files
-  gulp.watch('src/scripts/**/*.js', ['scripts-custom','scripts-vendor']);
+  gulp.watch('src/scripts/**/*.js', ['scripts-custom', 'scripts-vendor']);
 
   // Watch image files
   gulp.watch('src/images/**/*', ['images']);
@@ -143,6 +161,8 @@ gulp.task('watch', function() {
   livereload.listen();
 
   // Watch any files in dist/, reload on change
-  gulp.watch(['public/dist/**']).on('change', livereload.changed);
+  gulp.watch(['public/dist/**']).on('change', browserSync.reload);
+
+  gulp.watch(['views/**']).on('change', browserSync.reload);
 
 });
