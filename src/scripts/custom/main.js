@@ -1,5 +1,5 @@
 (function(){
 
-  console.log("running");
+  console.log("it is running.its fast");
 
 })();

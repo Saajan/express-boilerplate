@@ -4,8 +4,8 @@
   "description": "A boilerplate with express , gulp and sass",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "gulp;node app.js",
+    "start": "nodemon app.js",
+    "dev": "gulp;nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "saajan",

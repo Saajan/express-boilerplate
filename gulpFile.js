@@ -157,7 +157,7 @@ gulp.task('server', function() {
     // the script to run the app
     script: 'app.js',
     // this listens to changes in any of these files/routes and restarts the application
-    watch: ['app.js', 'routes/', 'public/*', 'public/*/**'],
+    watch: ['app.js', 'routes/'],
     ext: 'js'
       // Below i'm using es6 arrow functions but you can remove the arrow and have it a normal .on('restart', function() { // then place your stuff in here }
   }).on('restart', () => {
@@ -208,7 +208,5 @@ gulp.task('watch', function() {
   livereload.listen();
 
   // Watch any files in dist/, reload on change
-  gulp.watch(['public/dist/**']).on('change', browserSync.reload);
-
-  gulp.watch(['views/**']).on('change', browserSync.reload);
+  gulp.watch(['public/dist/**','views/**']).on('change', browserSync.reload);
 });
